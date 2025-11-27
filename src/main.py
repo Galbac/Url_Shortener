@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
-
+from src.api.routers.urls import router as urls_router
 from src.di.container import container
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     logger.info("ЗАПУСК ПРИЛОЖЕНИЯ...")
     yield
+    container.close()
     logger.info("ЗАВЕРШЕНИЕ ПРИЛОЖЕНИЯ...")
 
 
@@ -26,6 +27,7 @@ app = FastAPI(
 )
 setup_dishka(container=container, app=app)
 
+app.include_router(urls_router)
 
 @app.get("/")
 def root():
