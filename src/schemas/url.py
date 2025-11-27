@@ -1,10 +1,9 @@
-from datetime import datetime
+from pydantic import BaseModel
 
-from  pydantic import BaseModel
+
 class URLCreate(BaseModel):
     original_url: str
 
 
 class URLResponse(BaseModel):
     short_code: str
-

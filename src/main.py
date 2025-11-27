@@ -4,6 +4,9 @@ from contextlib import asynccontextmanager
 import uvicorn
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
+
 from src.api.routers.urls import router as urls_router
 from src.di.container import container
 
@@ -29,10 +32,15 @@ setup_dishka(container=container, app=app)
 
 app.include_router(urls_router)
 
-@app.get("/")
-def root():
-    return {"message": "Сокращение ссылок"}
+app.mount("/", StaticFiles(directory="frontend/static", html=True), name="static")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     uvicorn.run('src.main:app', host="0.0.0.0", port=8000, reload=True)

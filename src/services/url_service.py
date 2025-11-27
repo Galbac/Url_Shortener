@@ -1,8 +1,5 @@
 import secrets
 import string
-from typing import Any, Coroutine
-
-from sqlalchemy.orm import Mapped
 
 from src.repositories.url_repo import URLRepository
 from src.utils.utils import is_valid_url
@@ -10,8 +7,6 @@ from src.utils.utils import is_valid_url
 
 def _generate_short_code() -> str:
     return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(6))
-
-
 
 
 class URLService:
@@ -37,7 +32,6 @@ class URLService:
 
     async def get_original_url(self, short_code: str) -> str:
         url_obj = await self.repo.get_by_short_code(short_code)
-        if  url_obj:
+        if url_obj:
             return url_obj.original_url
         return None
-
