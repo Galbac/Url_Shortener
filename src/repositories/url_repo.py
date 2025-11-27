@@ -20,8 +20,8 @@ class URLRepository:
         await self.session.refresh(url)
         return url
 
-    async def get_by_short_url(self, short_url: str) -> Optional[URL]:
-        stmt = select(URL).where(URL.short_url == short_url)
+    async def get_by_short_code(self, short_code: str) -> Optional[URL]:
+        stmt = select(URL).where(URL.short_url == short_code)
         result = await self.session.execute(stmt)
         url_obj = result.scalar_one_or_none()
 

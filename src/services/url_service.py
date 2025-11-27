@@ -34,3 +34,10 @@ class URLService:
 
         await self.repo.create(original_url, short_code)
         return short_code
+
+    async def get_original_url(self, short_code: str) -> str:
+        url_obj = await self.repo.get_by_short_code(short_code)
+        if  url_obj:
+            return url_obj.original_url
+        return None
+
